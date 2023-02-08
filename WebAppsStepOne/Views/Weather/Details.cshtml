@@ -1,0 +1,82 @@
+﻿@using System.Reflection
+@model WebAppStepOne.ViewModels.LocationVM
+@{
+    ViewData["Title"] = "Weather information";
+    var location = Model.Location;
+    var forecast = Model.Forecast;
+    var props = location.GetType().GetProperties();
+}
+
+<div>
+    <div class="logo">
+        <img src="~/img/azure.svg" alt="..." />
+    </div>
+    <h1 class="display-4">Weather Info for @location.Name</h1>
+    <h5>@location.Country @location.Region</h5>
+    <br>
+    <div class="row">
+        <div class="col-3">
+            <h2>Weather report</h2>
+            <table class="table">
+                <thead>
+                    <tr>
+                        <th scope="col" colspan="2">Current state</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    @{
+                        for (int i = 3; i < props.Count(); i++)
+                        {
+                            <tr>
+                                <th>@props[i].Name</th>
+                                <td>@props[i].GetValue(location, null)</td>
+                            </tr>
+                        }
+                    }
+
+                </tbody>
+            </table>
+        </div>
+        <div class="col-9">
+            <div style="width: 100%">
+                <h2>Forecast for tomorrow</h2>
+                <table class="table">
+                    <thead>
+                        <tr>
+                            <th scope="col"></th>
+                            <th scope="col" colspan="2">Night</th>
+                            <th scope="col" colspan="2">Morning</th>
+                            <th scope="col" colspan="2">Day</th>
+                            <th scope="col" colspan="2">eavning</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        @{
+                            for (int i = 3; i < props.Count(); i++)
+                            {
+                                <tr>
+                                    <th>@props[i].Name</th>
+                                    @{
+                                        foreach (var hourForecast in forecast)
+                                        {
+                                            var prop_value = hourForecast
+                                            .GetType()
+                                            .GetProperty(props[i].Name)
+                                            .GetValue(hourForecast);
+                                            <td>@prop_value</td>
+                                        }
+                                    }
+
+                                </tr>
+                            }
+                        }
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+</div>
+
+<div>
+    <a asp-action="Index">Back to location select</a>
+</div>

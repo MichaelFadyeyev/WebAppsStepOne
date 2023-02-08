@@ -1,0 +1,23 @@
+﻿@{
+    ViewData["Title"] = "Weather Informer";
+}
+
+<div>
+    <div class="logo">
+        <img src="~/img/azure.svg" alt="..." />
+    </div>
+    <h1 class="display-4">Weather Info</h1>
+    <h2>Getting weather information for any location</h2>
+    <br>
+
+    @using (Html.BeginForm("Details", "Weather"))
+    {
+        <div class="mb-3">
+            <label for="location_name" class="control-label">Location name</label>
+            <input type=text name="location_name" class="form-control input-text" />
+        </div>
+        <br>
+        <input type="submit" value="Get report" class="btn btn-primary" />
+    }
+
+</div>
