@@ -10,7 +10,6 @@ namespace WebAppStepOne.Controllers
         WeatherService service = new WeatherService();
         public IActionResult Index()
         {
-
             return View();
         }
 
@@ -18,13 +17,43 @@ namespace WebAppStepOne.Controllers
         [HttpPost]
         public IActionResult Details(string location_name)
         {
-            service.SetLocation(location_name);
-            LocationVM locationVM = new LocationVM()
+            if (string.IsNullOrWhiteSpace(location_name)) { return Redirect(nameof(Index), "Enter location name!"); }
+
+            try
             {
-                Location = service.GetCurrent(),
-                Forecast = service.GetForecast()
-            };
-            return View(locationVM);
+                service.SetLocation(NormalizeInput(location_name));
+                LocationVM locationVM = new LocationVM()
+                {
+                    Location = service.GetCurrent(),
+                    Forecast = service.GetForecast()
+                };
+                return View(locationVM);
+
+            }
+            catch (Exception)
+            {
+                return Redirect(nameof(Index), "Incorrect location!");
+            }
+        }
+
+        ActionResult Redirect(string viewName, string message)
+        {
+            TempData["message"] = message;
+            return RedirectToAction(viewName);
+        }
+
+        string NormalizeInput(string location_name)
+        {
+            location_name.ToLower();
+            switch (location_name)
+            {
+                case ("kyiv"):
+                case ("київ"):
+                case ("киев"):
+                    location_name = "kiev";
+                    break;
+            }
+            return location_name;
         }
 
     }

@@ -26,7 +26,7 @@ namespace WebAppStepOne.Services
         {
             root = GetRoot(apiUriCurrent + location_name);
 
-            this.location_name = location_name;
+            this.location_name = GetProperty("location", "name");
 
             region = GetProperty("location", "region");
             country = GetProperty("location", "country");

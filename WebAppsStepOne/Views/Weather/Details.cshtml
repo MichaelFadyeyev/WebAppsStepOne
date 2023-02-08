@@ -1,10 +1,12 @@
 ﻿@using System.Reflection
+@using System.Globalization;
 @model WebAppStepOne.ViewModels.LocationVM
 @{
     ViewData["Title"] = "Weather information";
     var location = Model.Location;
     var forecast = Model.Forecast;
     var props = location.GetType().GetProperties();
+    var location_name = (new CultureInfo("en-US", false).TextInfo).ToTitleCase(location.Name);
 }
 
 <div>
@@ -15,7 +17,7 @@
     <h5>@location.Country @location.Region</h5>
     <br>
     <div class="row">
-        <div class="col-3">
+        <div class="col-12 col-lg-4">
             <h2>Weather report</h2>
             <table class="table">
                 <thead>
@@ -37,7 +39,7 @@
                 </tbody>
             </table>
         </div>
-        <div class="col-9">
+        <div class="col-lg-8">
             <div style="width: 100%">
                 <h2>Forecast for tomorrow</h2>
                 <table class="table">
